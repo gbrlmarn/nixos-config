@@ -22,4 +22,7 @@
   vim.keymap.set('n', '<leader>fh', require('telescope.builtin').help_tags, {desc = 'Telescope help tags'})
   vim.keymap.set('n', '<leader>fg', require('telescope.builtin').live_grep, {desc = 'Telescope live grep'})
   vim.keymap.set('n', '<leader>fb', require('telescope.builtin').buffers, {desc = 'Telescope buffers'})
+
+  vim.keymap.set("n", "K", function() vim.lsp.buf.hover() end, opts)
+  require'lspconfig'.gopls.setup{}
 ''

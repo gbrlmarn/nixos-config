@@ -108,6 +108,9 @@
     ripgrep
     ghostty
     jq
+    chromium
+    go
+    gopls
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
