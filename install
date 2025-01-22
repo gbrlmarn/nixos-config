@@ -1,8 +1,8 @@
 #!/bin/sh
 
 # import './hardware-configuration.nix' not working with symbolic link
-sudo ln -i $(pwd)/configuration.nix /etc/nixos/
+sudo ln -i -s $(pwd)/machines/nixos/configuration.nix /etc/nixos/ &
 sudo nixos-rebuild switch
 
-ln -i -s $(pwd)/home.nix ~/.config/home-manager/
+ln -i -s $(pwd)/users/gbrlmarn/home.nix ~/.config/home-manager/ &
 home-manager switch
