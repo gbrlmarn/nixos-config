@@ -70,6 +70,10 @@
     EDITOR = "nvim";
   };
 
+  xdg.configFile = {
+    "ghostty/config".text = builtins.readFile ./ghostty.linux;
+  };
+
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 
@@ -104,34 +108,7 @@
       dracula-nvim
       telescope-nvim
     ];
-    extraLuaConfig = ''
-      vim.opt.tabstop = 4
-      vim.opt.softtabstop = 4
-      vim.opt.shiftwidth = 4
-      vim.opt.expandtab = true
-      vim.opt.smartindent = true
-      vim.opt.number = true
-      vim.opt.ruler = true
-      vim.opt.ai = true
-      vim.opt.hlsearch = false
-
-      require('dracula').setup({
-          colors = {
-              bg = "#000000",
-          },
-      })
-      vim.cmd("colorscheme dracula")
-      -- vim.cmd("hi Normal ctermbg=16 guibg=#000000")
-      -- vim.cmd("hi LineNr ctermbg=16 guibg=#000000")
-      -- vim.cmd("hi EndOfBuffer ctermbg=16 guibg=#000000")
-
-      vim.g.mapleader = ","
-
-      vim.keymap.set('n', '<leader>ff', require('telescope.builtin').find_files, {desc = 'Telescope find files'})
-      vim.keymap.set('n', '<leader>fh', require('telescope.builtin').help_tags, {desc = 'Telescope help tags'})
-      vim.keymap.set('n', '<leader>fg', require('telescope.builtin').live_grep, {desc = 'Telescope live grep'})
-      vim.keymap.set('n', '<leader>fb', require('telescope.builtin').buffers, {desc = 'Telescope buffers'})
-    '';
+    extraLuaConfig = import ./nvim.nix;
   };
 
   programs.tmux = {
@@ -147,37 +124,10 @@
 
     plugins = with pkgs; [
       tmuxPlugins.better-mouse-mode
+      tmuxPlugins.tmux-fzf
+      tmuxPlugins.resurrect
     ];
 
-    extraConfig = ''
-      # https://old.reddit.com/r/tmux/comments/mesrci/tmux_2_doesnt_seem_to_use_256_colors/
-      set -g default-terminal "xterm-256color"
-      set -ga terminal-overrides ",*256col*:Tc"
-      set -ga terminal-overrides '*:Ss=\E[%p1%d q:Se=\E[ q'
-      set-environment -g COLORTERM "truecolor"
-
-      # Mouse works as expected
-      set-option -g mouse on
-      # easy-to-remember split pane commands
-      bind | split-window -h -c "#{pane_current_path}"
-      bind - split-window -v -c "#{pane_current_path}"
-      bind c new-window -c "#{pane_current_path}"
-
-      # Remap prefix
-      unbind C-b
-      set-option -g prefix C-a
-      bind-key C-a send-prefix
-
-      set-window-option -g mode-keys vi
-      bind -T copy-mode-vi v send-keys -X begin-selection
-      bind -T copy-mode-vi y send-keys -X copy-pipe-and-cancel 'xclip -in -selection clipboard'
-
-      # left bar
-      set-option -g status-style bg=default
-      set -g status-position bottom
-      set -g status-right '%H:%M:%S %d/%m/%Y'
-      set -g status-right-length 50
-      set -g status-left-length 20
-    '';
+    extraConfig = import ./tmux.nix;
   };
 }

@@ -102,6 +102,7 @@
     tmux
     xclip
     neovim
+    fzf
     discord
     bitwarden
     ripgrep
